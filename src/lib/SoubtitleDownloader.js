@@ -33,8 +33,6 @@ class SoubtitleDownloader {
     searchAndDownloadSoubtitles(file) {
 
         var opensubtitles = require("subtitler");
-
-
         opensubtitles.api.login()
             .then(function (token) {
                 opensubtitles.api.searchForFile(token, lang, file).done(
@@ -50,21 +48,28 @@ class SoubtitleDownloader {
                             dropZone.innerHTML = "Done!";
                             setTimeout(function () {
                                 dropZone.innerHTML = oldHtml;
+                                document.querySelector('.dropArea').classList.remove('droppableArea');
                             }, 1000)
 
                         } else {
                             var dropZone = document.getElementById("dropZone");
                             var oldHtml = dropZone.innerHTML;
-                            dropZone.innerHTML = "Error!";
+                            dropZone.innerHTML = "Error";
                             setTimeout(function () {
                                 dropZone.innerHTML = oldHtml;
+                                document.querySelector('.dropArea').classList.remove('droppableArea');
                             }, 1000)
                         }
                         opensubtitles.api.logout(token);
                     }
                 ).catch(function (error) {
-                    alert(error);
-                    message.innerHTML = "Error";
+                    var dropZone = document.getElementById("dropZone");
+                    var oldHtml = dropZone.innerHTML;
+                    dropZone.innerHTML = "Error!";
+                    setTimeout(function () {
+                        dropZone.innerHTML = oldHtml;
+                        document.querySelector('.dropArea').classList.remove('droppableArea');
+                    }, 1000)
                 });
             })
     };

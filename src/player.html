@@ -3,7 +3,7 @@
     <head>
         <link rel = 'stylesheet' href='layout/player.css'/>
     </head>
-    <body>
+    <body class="draggable">
 
         <section id='playerContainer' class='player paused'>
             <div class="flags">
@@ -20,9 +20,7 @@
                     <img id="spa" src="flags/4x3/es.svg" width="60px">
                 </div>
             </div>
-            <video id='videoContainer' class='video draggable' >
-
-            </video>
+            <video id='videoContainer' class='video' ></video>
             <div id='controlContainer' class='controls'>
                 <progress id ='prog' class='progress' ></progress>
                 <div id = 'count' class = 'count'></div>
@@ -34,9 +32,7 @@
                        step=0.05
                 />
             </div>
-
             <section id='dropArea' class='dropArea'>
-
                 <div id="dropZone" class='dropZone'>
                     Drag and Drop
                     <br/>

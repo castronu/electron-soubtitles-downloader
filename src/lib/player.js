@@ -15,8 +15,14 @@ function init(){
 
 function bindEvents(){
     var video = document.querySelector('#videoContainer');
-    var progBar = document.querySelector('#prog');
     var dropArea = document.querySelector('#dropArea');
+
+    var close = document.querySelector('#close');
+    close.addEventListener('click', function () {
+        window.close();
+    })
+
+
 
     video.addEventListener(
         'timeupdate',
@@ -221,9 +227,7 @@ function loadSoubtitles(e) {
     e.preventDefault();
 
     var fs = require('fs');
-
     var soubtitleDownloader = new SoubtitleDownloader();
-
 
 
     var files = [];
