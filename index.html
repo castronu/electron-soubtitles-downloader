@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Photon</title>
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/photon.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="bower_components/flag-icon-css/css/flag-icon.css">
+
+    <!-- Javascript -->
+    <script src="js/menu.js" charset="utf-8"></script>
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+</head>
+<body id="holder" >
+<div >
+
+    <video  id="bgvid">
+        <source src="video.mp4" type="video/mp4">
+    </video>
+
+
+
+
+
+
+
+    <!-- .toolbar-header sits at the top of your app -->
+    <header class="toolbar toolbar-header">
+        <h1 class="title">Sublr</h1>
+    </header>
+
+    <!-- Your app's content goes inside .window-content -->
+    <div style="height: 100%;width: 100%; text-align: center;padding-top: 5%;"  >
+
+
+
+        <div class="section group">
+            <div class="col span_1_of_4">
+
+                <div class="flag-wrapper">
+                    <div id="ita" class="img-thumbnail flag flag-icon-background flag-icon-it"></div>
+                </div>
+            </div>
+            <div class="col span_1_of_4">
+                <div class="flag-wrapper">
+                    <div id="eng" class="img-thumbnail flag flag-icon-background flag-icon-gb"></div>
+                </div>
+            </div>
+            <div class="col span_1_of_4">
+                <div class="flag-wrapper">
+                    <div id="fre" class="img-thumbnail flag flag-icon-background flag-icon-fr"></div>
+                </div>
+            </div>
+            <div class="col span_1_of_4">
+                <div class="flag-wrapper">
+                    <div id="spa" class="img-thumbnail flag flag-icon-background flag-icon-es"></div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+        <div id="message" style="
+       font-family: 'Roboto', sans-serif;
+        font-size: 18px;
+        font-weight: 700;
+        font-style: normal;
+        line-height: 1.2;
+        color: white;
+            padding-top: 70%;
+        ">Select a language & drag a file or directory here
+        </div>
+
+        <script>
+            var message = document.getElementById('message');
+            var opensubtitles = require("subtitler");
+            var pathService = require('path')
+            var fs = require('fs');
+
+
+            var count = 0;
+
+            var lang = "eng";
+
+            var buttons = {};
+
+            var buttonFre = document.getElementById("fre");
+            buttonFre.addEventListener('click', function () {
+                        clearOthers();
+                buttonFre.style.border = "2px solid green";
+                        lang = "fre";
+
+                    }
+            );
+            buttons['fre'] = buttonFre;
+
+            var buttonIta = document.getElementById("ita");
+            buttonIta.addEventListener('click', function () {
+                clearOthers();
+                buttonIta.style.border = "2px solid green";
+                        lang = "ita";
+                    }
+            );
+            buttons['ita'] = buttonIta;
+
+            var buttonEng = document.getElementById("eng");
+            buttonEng.addEventListener('click', function () {
+                clearOthers();
+                buttonEng.style.border = "2px solid green";
+                        lang = "eng";
+
+                    }
+            );
+            buttons['eng'] = buttonEng;
+            var buttonSpa = document.getElementById("spa");
+            buttonSpa.addEventListener('click', function () {
+                clearOthers();
+                buttonSpa.style.border = "2px solid green";
+                        lang = "spa";
+                    }
+            );
+            buttons['spa'] = buttonSpa;
+
+
+            var clearOthers = function () {
+                for (var index in buttons) {
+                    buttons[index].style.border = "none";
+                }
+            };
+
+
+            var searchAndDownloadSoubtitles = function (file) {
+
+
+                opensubtitles.api.login()
+                        .then(function (token) {
+                            opensubtitles.api.searchForFile(token, lang, file).done(
+                                    function (results) {
+                                        if (results.length != 0) {
+                                            opensubtitles.downloader.download(results, 1, file, null);
+                                            message.innerHTML = "Done!";
+                                            /*new Notification("title", {
+                                                title: "Basic Notification",
+                                                body: "Short message part"
+                                            });*/
+                                            var vid = document.getElementById("bgvid");
+                                            vid.play();
+                                        } else {
+                                            message.innerHTML = "Error";
+                                        }
+                                        opensubtitles.api.logout(token);
+                                    }
+                            ).catch(function (error) {
+                                alert(error);
+                                message.innerHTML = "Error";
+                            });
+                        })
+            };
+            var holder = document.getElementById('holder');
+            holder.ondragover = function () {
+                return false;
+            };
+            holder.ondragleave = holder.ondragend = function () {
+                return false;
+            };
+
+            var checkDirectory = function (dirPath) {
+
+            }
+
+
+            var checkDirectoryAndDownloadFiles = function (path) {
+                fs.readdir(path, function (err, files) {
+                    for (var i = 0; i < files.length; i++) {
+
+                        if (fs.lstatSync(path + "/" + files[i]).isDirectory()) {
+                            checkDirectoryAndDownloadFiles(path + "/" + files[i]);
+                        }
+
+
+                        var obj = files[i];
+                        var fileExtension = pathService.extname(obj);
+                        if (fileExtension === ".mp4" || fileExtension === ".avi" || fileExtension === ".mkv") {
+
+                            searchAndDownloadSoubtitles(path + "/" + files[i]);
+                        }
+
+                    }
+
+                })
+            };
+
+            holder.ondrop = function (e) {
+                e.preventDefault();
+                var file = e.dataTransfer.files[0];
+                if (fs.lstatSync(file.path).isDirectory()) {
+                    checkDirectoryAndDownloadFiles(file.path);
+                    return;
+                } else {
+                    searchAndDownloadSoubtitles(file.path);
+                }
+
+
+            };
+
+        </script>
+    </div>
+</div>
+</body>
+</html>
