@@ -2,16 +2,18 @@ var packager = require('electron-packager');
 
 var options={
     dir:__dirname+'/src/',
-    name:'Electron Video Player',
+    name:'Electron Soubtitler Downloader',
     all:true,
-    version:'0.31.1',
+    platform:'darwin',
+    arch:'x64',
+    version:'0.37.4',
     out:'./build/',
-    'app-bundle-id':'it.diginow.electronvideoplayer',
+    'app-bundle-id':'com.castronu.electron-soubtitles-downloader',
     'app-version':'1.0.0',
     overwrite:true,
     icon:__dirname+'/src/img/logo-256.png',
     'version-string':{
-        CompanyName:'digiNow inc.',
+        CompanyName:'castronu',
         ProductVersion:'1.0.0',
         ProductName:'Electron Video Player'
     }

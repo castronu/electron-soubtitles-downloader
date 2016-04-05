@@ -2,5 +2,8 @@
   "name": "electron-video-player",
   "version": "0.0.1",
   "main": "main.js",
-  "dependencies": {}
+  "dependencies": {
+    "electron-debug": "^0.5.2",
+    "subtitler": "^2.4.0"
+  }
 }

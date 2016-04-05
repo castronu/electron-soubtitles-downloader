@@ -3,17 +3,17 @@ var BrowserWindow = require('browser-window');
 
 require('crash-reporter').start();
 
+require('electron-debug')({
+    showDevTools: false
+});
+
 var player = null;
 
-app.on(
-    'window-all-closed',
-    function() {
-        if (process.platform != 'darwin') {
-            app.quit();
-        }
-    }
-);
-
+app.on('window-all-closed', app.quit);
+app.on('before-quit', () => {
+    mainWindow.removeAllListeners('close');
+    mainWindow.close();
+});
 app.on(
     'ready',
     function() {
