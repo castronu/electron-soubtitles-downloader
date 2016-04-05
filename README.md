@@ -1,1 +1,1 @@
-TBD
+Electron soubtitle downloader app
